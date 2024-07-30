@@ -2,6 +2,7 @@ Django>=3.2,<4.0
 djangorestframework>=3.12,<4.0
 django-cors-headers>=3.5,<4.0
 paytmchecksum
+psycopg2-binary
 pscyopg2==2.9.9
 whiteNoise==6.7.0
 pytest==8.2.2
