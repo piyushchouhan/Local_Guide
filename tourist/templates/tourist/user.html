@@ -1,0 +1,20 @@
+{% extends "tourist/layout.html" %}
+{% block body %}
+<style>
+    body{
+        background-image: none;
+    }
+</style>
+
+{% if user.first_name and user.last_name %}
+<h2>Name: {{ user.first_name }} {{ user.last_name }}</h2>
+{% endif %}
+<h5>Email: {{ user.email }}</h5>
+<h5>Username: {{ user.username }}</h5> 
+
+<div style="text-align: left;">
+    <a class="btn btn-primary btn-sm" type="button" href="{% url 'edit_user' user.id %}">Edit Profile</a>
+</div>
+
+
+{% endblock %}

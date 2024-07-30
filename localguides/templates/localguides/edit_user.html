@@ -1,0 +1,88 @@
+{% extends "localguides/layout.html" %}
+{% block body %}
+
+<style>
+    div{
+        text-align: left;
+    }
+</style>
+    
+<div class="container mt-5 text-center">
+    <h2>Edit Profile</h2>
+    
+    <form method="post" action="{% url 'update_lg' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="first_name" >First Name:</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ localguide.user.first_name }}" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ localguide.user.last_name }}" required>
+        </div>
+    
+        <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text"  class="form-control" id="username" name="username" value="{{ localguide.user.username }}" readonly>
+        </div>
+    
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ localguide.user.email }}" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="location">Location</label>
+            <select name="location" id="location" class="form-control" required>
+                <option value="" selected disabled>Select a Location</option>
+                {% for location in locations %}
+                    <option value="{{ location.id }}">{{ location.location_name }}</option>
+                {% endfor %}
+            </select>
+          </div>
+    
+        <div class="form-group">
+            <label for="location">Email:</label>
+            <input type="email" class="form-control" id="location" name="email" value="{{ localguide.user.email }}" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" required>{{ localguide.description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="rate_per_hour">Rate per Day</label>
+            <input type="number" class="form-control" id="rate_per_hour" name="rate_per_hour" value="{{localguide.rate_per_hour}}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="contact_info">Contact Info</label>
+            <input type="number" class="form-control" id="contact_info" name="contact_info" value="{{localguide.contact_info}}" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="language">Language</label>
+            <select name="language" id="language" class="form-control" required>
+                <option value="" selected disabled>Select a Language</option>
+                {% for choice in language_choices %}
+                    <option value="{{ choice.id }}">{{ choice.language }}</option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="language">Gender</label>
+            <select name="gender" id="gender" class="form-control" required disabled>
+                <option value="{{ localguide.gender.id }}" selected>{{ localguide.gender.gender }}</option>
+            </select>
+        </div>
+    
+            <div style="text-align: center;">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+    </form>
+</div>
+
+{% endblock %}

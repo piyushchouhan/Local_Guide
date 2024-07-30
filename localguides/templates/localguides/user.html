@@ -1,0 +1,67 @@
+{% extends 'localguides/layout.html' %}
+
+{% block body %}
+<style>
+    .lg-info {
+  background-color: #f4f1f1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  width: 600px;
+  text-align: center;
+}
+
+.lg-info img {
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.lg-info h5 {
+  margin-bottom: 5px;
+  font-weight: normal;
+}
+
+.lg-info p {
+  margin-bottom: 10px;
+}
+
+.lg-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+</style>
+
+<div class="lg-info">
+    <img src="/media/{{ localguide.image }}" alt="Local Guide Image" height="200" width="200">
+    <h5>Name : {{localguide.user.first_name}} {{localguide.user.last_name}}</h5>
+    <h5>Your Location : {{localguide.location}}</h5>
+    <h5>Description : {{ localguide.description }}</h5>
+    <h5>Rate Per Day : {{localguide.rate_per_hour}}</h5>
+    <h5>Contact : {{localguide.contact_info}}</h5>
+    <h5>Language: {{localguide.language}}</h5>
+    <div style="text-align: center; ">
+    <a class="btn btn-primary btn-sm" type="button" style="color: #ffffff;" href="{% url 'edit_lg' %}" >Edit Profile</a>
+  </div>
+</div>
+
+
+
+<h6>Tourists who booked Guide: {{ localguide.user.username }}</h6>
+<ul>
+{% for tourist, booking_date, id in tourists_with_dates %}
+    <li>{{ tourist.username }} - Booked on: {{ booking_date|date:"Y-m-d H:i" }}
+      <form method="post" action="{% url 'delete_booking' id %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+      </form>
+    </li>
+{% empty %}
+    <li>No tourists have booked this guide.</li>
+{% endfor %}
+</ul>
+
+
+
+{% endblock %}

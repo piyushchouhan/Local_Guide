@@ -1,0 +1,30 @@
+{% extends "tourist/layout.html" %}
+{% block body %}
+<style>
+    .local-guide-info {
+        color: white;
+    }
+    .form-group{
+        color: yellow;
+    }
+</style>
+
+<div class="local-guide-info">
+    <img src="/media/{{ local_guide.image }}" alt="Local Guide Image" height="200" width="200">
+    <h2>Name: {{local_guide.user.first_name}} {{local_guide.user.last_name}}</h2>
+    <p>Location: {{local_guide.location.location_name}}</p>
+    <p>Description: {{local_guide.description}}</p>
+    <p>Rate Per Hour: {{local_guide.rate_per_hour}}</p>
+    <p>Contact: {{local_guide.contact_info}}</p>
+    <p>Language: {{local_guide.language.language}}</p>
+    <input type="hidden" id="guide-id" value="{{ local_guide.id }}">
+</div>
+
+<div class="form-group">
+    <label for="date-picker">Select Date for booking:</label>
+    <input type="date" id="date-picker">
+    <button class="btn btn-primary btn-sm" id="book-button" style="font-size: 16px; padding: 2px 10px;">Book</button>
+</div>
+
+
+{% endblock %}

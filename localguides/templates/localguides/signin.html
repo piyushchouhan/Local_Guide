@@ -1,0 +1,33 @@
+{% extends "localguides/layout.html" %}
+{% block body %}
+
+{% if message %}
+    <div>{{ message }}</div>
+{% endif %}
+
+<style>
+    h2 {
+    font-size: xx-large;
+    font-weight:normal; /* Make the font bold */
+    font-family: sans-serif;
+    color:#ffffff; /* Make text color transparent to show the gradient */
+}
+</style>
+
+<div class="container text-center" style="max-width: 400px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background: linear-gradient(to bottom, rgba(52, 152, 219, 0.8), rgba(44, 62, 80, 1))">
+    <h2 style="color: white;">Local Guide Sign In</h2>
+    <form action="{% url 'localGuide_signIn' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Login">
+    </form>
+
+    <p style="margin-top: 10px; color: white;">Don't have an account? <a href="{% url 'localGuide_signUp' %}" style="color: #ecf0f1;">Sign Up here.</a></p>
+</div>
+
+{% endblock %}

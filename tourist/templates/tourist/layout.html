@@ -1,0 +1,452 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local Guide</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <link type="text/css" href="{% static 'tourist/style.css' %}" rel="stylesheet"/>
+ 
+
+    <script>
+      /**
+       * @license
+       * Copyright 2019 Google LLC. All Rights Reserved.
+       * SPDX-License-Identifier: Apache-2.0
+       */
+      let map;
+      let marker;
+      let geocoder;
+      let responseDiv;
+      let response;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 8,
+          center: { lat: -34.397, lng: 150.644 },
+          mapTypeControl: false,
+        });
+        geocoder = new google.maps.Geocoder();
+
+        const inputText = document.createElement("input");
+
+        inputText.type = "text";
+        inputText.placeholder = "Enter a location";
+
+        const submitButton = document.createElement("input");
+
+        submitButton.type = "button";
+        submitButton.value = "Set Location";
+        submitButton.classList.add("button", "button-primary");
+
+        const clearButton = document.createElement("input");
+
+        clearButton.type = "button";
+        clearButton.value = "Clear";
+        clearButton.classList.add("button", "button-secondary");
+        response = document.createElement("pre");
+        response.id = "response";
+        response.innerText = "";
+        responseDiv = document.createElement("div");
+        responseDiv.id = "response-container";
+        responseDiv.appendChild(response);
+
+        const instructionsElement = document.createElement("p");
+
+        instructionsElement.id = "instructions";
+        instructionsElement.innerHTML =
+          "<strong>Instructions</strong>: Enter an address in the textbox to geocode or click on the map to reverse geocode.";
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
+        map.controls[google.maps.ControlPosition.LEFT_TOP].push(
+          instructionsElement
+        );
+        map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
+        marker = new google.maps.Marker({
+          map,
+        });
+        map.addListener("click", (e) => {
+          geocode({ location: e.latLng });
+        });
+        submitButton.addEventListener("click", () =>
+          geocode({ address: inputText.value })
+        );
+        clearButton.addEventListener("click", () => {
+          clear();
+        });
+        clear();
+      }
+
+      function clear() {
+        marker.setMap(null);
+      }
+
+      function geocode(request) {
+        clear();
+        geocoder
+          .geocode(request)
+          .then((result) => {
+            const { results } = result;
+
+            map.setCenter(results[0].geometry.location);
+            marker.setPosition(results[0].geometry.location);
+            marker.setMap(map);
+            
+            fetch('process_location_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),  // Include CSRF token
+            },
+            body: JSON.stringify(result),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Location data processed:', data);
+            // Handle any further actions based on the response if needed
+        })
+        .catch(error => {
+            console.error('Error sending geocode result:', error);
+        });
+            return results;
+
+          })
+          .catch((e) => {
+            alert("Geocode was not successful for the following reason: " + e);
+          });
+      }
+
+    
+// Helper function to get CSRF token from cookies
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+      window.initMap = initMap;
+    </script>
+
+  
+     <style>
+      /**
+       * @license
+       * Copyright 2019 Google LLC. All Rights Reserved.
+       * SPDX-License-Identifier: Apache-2.0
+       */
+      /**
+       * Always set the map height explicitly to define the size of the div element
+       * that contains the map. 
+       */
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      input[type="text"] {
+        background-color: #fff;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+        margin: 10px;
+        padding: 0 0.5em;
+        font: 400 18px Roboto, Arial, sans-serif;
+        overflow: hidden;
+        line-height: 40px;
+        margin-right: 0;
+        min-width: 25%;
+      }
+
+      input[type="button"] {
+        background-color: #fff;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+        margin: 10px;
+        padding: 0 0.5em;
+        font: 400 18px Roboto, Arial, sans-serif;
+        overflow: hidden;
+        height: 40px;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+      input[type="button"]:hover {
+        background: rgb(235, 235, 235);
+      }
+      input[type="button"].button-primary {
+        background-color: #1a73e8;
+        color: white;
+      }
+      input[type="button"].button-primary:hover {
+        background-color: #1765cc;
+      }
+      input[type="button"].button-secondary {
+        background-color: white;
+        color: #1a73e8;
+      }
+      input[type="button"].button-secondary:hover {
+        background-color: #d2e3fc;
+      }
+
+      #response-container {
+        background-color: #fff;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+        margin: 10px;
+        padding: 0 0.5em;
+        font: 400 18px Roboto, Arial, sans-serif;
+        overflow: hidden;
+        overflow: auto;
+        max-height: 50%;
+        max-width: 90%;
+        background-color: rgba(255, 255, 255, 0.95);
+        font-size: small;
+      }
+
+      #instructions {
+        background-color: #fff;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+        margin: 10px;
+        padding: 0 0.5em;
+        font: 400 18px Roboto, Arial, sans-serif;
+        overflow: hidden;
+        padding: 1rem;
+        font-size: medium;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h2 style="margin-left: auto; margin-right: auto; text-align: center;">
+        <a href="{% url 'index' %}" style="text-decoration: none; display: block;">
+          Local Guides
+        </a>
+      </h2>
+      <div class="user" style="color: black;">
+        {% if user.is_authenticated and user|is_local_guide  %}
+            Signed in as <a href="{% url 'touristUser' user.id %}"><strong>{{ user.username }}</strong></a> 
+        {% else %}
+            Not signed in.
+        {% endif %}
+    </div>
+      <ul class="nav nav-pills justify-content-between">
+        <li class="nav-item">
+            <!-- Empty item for balancing -->
+        </li>
+        <li class="nav-item search-box">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="search-container">
+                        <form id="search-form" action="{% url 'search_city' %}" method="GET">
+                            {% csrf_token %}
+                            <input type="text" name="city" id="city" placeholder="Search Cities..." class="form-control" style="width: 300px;" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <div class="auth-links" style="margin-right: 110px ;">
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary btn-sm" href="{% url 'signOut' %}">Sign Out</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm" href="{% url 'signIn' %}">Sign In</a>
+                    <a class="btn btn-secondary btn-sm" href="{% url 'signUp' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+      <hr />
+      {% block body %} {% endblock %}
+    </div>
+    <hr />
+    <div class="footer">
+      <div class="left-container">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Facebook</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Instgram</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">X</a>
+          </li>
+        </ul>
+      </div>
+      <div class="right-container">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'privacy' %}">Privacy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'terms' %}">Terms & Conditions</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    let isCitySelected = false; // Flag to check if the user selected a city from the suggestions
+    const searchForm = document.querySelector('#search-form');
+    const cityInput = document.querySelector('#city');
+
+    // Initialize the autocomplete
+    $("#city").autocomplete({
+        source: "{% url 'autocomplete_city' %}",
+        messages: {
+            noResults: "",
+            results: function () {}
+        },
+        select: function (event, ui) {
+            isCitySelected = true; // The user selected a city from the suggestions
+        }
+    });
+
+    // Validate before form submission
+    searchForm.addEventListener('submit', function (event) {
+        if (!isCitySelected) {
+            event.preventDefault(); // Prevent form from submitting
+            alert('City does not exist');
+        }
+    });
+
+    // Handle form submission on Enter key press
+    cityInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const cityQuery = cityInput.value.trim();
+            if (cityQuery) {
+                // Redirect to the desired URL
+                window.location.href = `/city/${cityQuery}`;
+            }
+        }
+    });
+
+    // Reset flag on input change
+    cityInput.addEventListener('input', function () {
+        isCitySelected = false; // Reset the flag if the user changes the input
+    });
+});
+let bookingId;
+document.addEventListener("DOMContentLoaded", function () {
+    const datePicker = document.getElementById("date-picker");
+    const guideId = parseInt(document.getElementById("guide-id").value, 10); // Parse as an integer
+    const bookButton = document.getElementById("book-button");
+
+    bookButton.addEventListener("click", function () {
+      const selectedDate = datePicker.value;
+      console.log(JSON.stringify({ date:selectedDate, guide_id: guideId }));
+        fetch('/localguide/book_date', {
+            method: 'POST',
+            body: JSON.stringify({ date: selectedDate, guide_id: guideId }),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success'){
+              alert(data.message);
+               // Extract the booking_id from the JSON response
+               bookingId = data.booking_id;
+                // Redirect to the payment page with the booking_id
+                window.location.href = `/payment/${bookingId}`;
+            } else {
+              alert('Booking failed, Not Available!.');
+            }
+        })
+        .catch(error =>{
+          console.error('Error:', error);
+        })
+    });
+});
+
+// Define the getCookie function to fetch CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function sendEmail() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    // Extract latitude and longitude
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Prepare data to send to Django view
+                    var data = {
+                        'latitude': latitude,
+                        'longitude': longitude,
+                        // Add other form data if needed
+                    };
+
+                    // Make an AJAX request to the Django view
+                    fetch('/send_email/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);  // Show the response message
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+console.log(bookingId);
+</script>
+
+
+
+</html>

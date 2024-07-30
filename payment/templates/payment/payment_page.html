@@ -1,0 +1,29 @@
+{% extends 'tourist/layout.html' %}
+
+{% block body %}
+
+<div style="text-align: center; color: white;">
+    <h1>Payment Page</h1>
+
+    <!-- Display the Paytm QR code -->
+    {% if qr_code_data.body.image %}
+        <img src="{{ qr_code_data.body.image }}" alt="Paytm QR Code">
+    {% else %}
+        <p>QR Code Image Not Available</p>
+    {% endif %}
+
+    <p>Order ID: {{ qr_code_data.body.qrCodeId }}</p>
+    <p>Result Status: {{ qr_code_data.body.resultInfo.resultStatus }}</p>
+    <p>Result Code: {{ qr_code_data.body.resultInfo.resultCode }}</p>
+    <p>Result Message: {{ qr_code_data.body.resultInfo.resultMsg }}</p>
+</div>
+
+<script>
+    // You can add JavaScript here for any client-side interactions
+</script>
+
+<div style="text-align: center;">
+    <a class="btn btn-primary btn-sm" href="{% url 'meet_location' %}">Meeting Location</a>
+</div>
+
+{% endblock %}

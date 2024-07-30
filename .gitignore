@@ -1,0 +1,100 @@
+# Python-related
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.db
+*.sqlite3
+
+# Environment files
+.env
+
+# Django-related
+*.log
+staticfiles/
+media/
+*.pot
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+db.sqlite3
+*.sqlite3
+
+# Django migrations
+*/migrations/*
+!*/migrations/__init__.py
+
+# IDE/editor-specific
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# MacOS-specific
+.DS_Store
+
+# Windows-specific
+Thumbs.db
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# pytest
+.cache/
+
+# Coverage
+.coverage
+*.cover
+
+# mypy
+.mypy_cache/
+
+# Docker
+docker-compose.override.yml
+*.dockerfile
+.dockerignore
+
+# Ignore database files
+*.db
+*.sqlite3
+
+# Ignore other file types
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.swo
+*.swp
+*.sublime-workspace
+*.sublime-project
+
+# Local configuration files
+.local_settings.py
+
+# Miscellaneous
+*.bak
+*.tmp
+*.swp
+*.swo

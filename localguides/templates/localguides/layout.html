@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalGuide</title>
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+  <link type="text/css" href="{% static 'localguides/style.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <div class="wrapper">
+        <h2>
+          <a href="{% url 'logout_and_redirect' %}" style="text-decoration: none">
+            Local Guides
+          </a>
+        </h2>
+        <div>
+          {% if user.is_authenticated %}
+              Signed in as <a href="{% url 'lgUser'%}"><strong>{{ user.username }}</strong></a> 
+          {% else %}
+              Not signed in.
+          {% endif %}
+      </div>
+    <div class="auth-links">
+      {% if user.is_authenticated %}
+      <a class="btn btn-primary btn-sm" href="{% url 'localGuide_signOut' %}">Sign Out</a>
+      {% else %}
+      <a class="btn btn-primary btn-sm" href="{% url 'localGuide_signIn' %}">Sign In</a>
+      <a class="btn btn-secondary btn-sm" href="{% url 'localGuide_signUp' %}">Sign Up</a>
+      {% endif %}
+  </div>
+      <hr />
+      {% block body %} {% endblock %}
+    </div>
+    <hr />
+    <div class="footer">
+      <div class="left-container">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Facebook</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Instgram</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">X</a>
+          </li>
+        </ul>
+      </div>
+      <div class="right-container">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about_us' %}">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'privacy' %}">Privacy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'terms' %}">Terms & Conditions</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</body>
+
+</html>

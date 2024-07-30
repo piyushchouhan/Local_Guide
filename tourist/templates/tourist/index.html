@@ -1,0 +1,43 @@
+{% extends "tourist/layout.html"%}
+{% block body %}
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px; /* Adjust the gap between items as needed */
+    }
+
+    .grid-item {
+        /* Style for each grid item */
+        padding: 10px;
+        text-align: left;
+    }
+
+    .grid-item:last-child {
+        grid-column: span 2; /* Span two columns for the last item */
+    }
+</style>
+<div class="auth-links">
+    <a class="nav-link" href="{% url 'Logout_and_Redirect' %}" style="color: white;">Local Guide</a>
+</div>
+
+<button type="button" class="btn btn-primary btn-sm" onclick="sendEmail()" style="text-align: center; width: 210px;">Send Email with Geolocation</button>
+<h2 style="color: white;">Welcome Traveller</h2>
+<h3 style="color: white;">List of top Cities</h3>
+
+
+<div class="grid-container">
+    {% for city_name in city %}
+        <div class="grid-item">
+            <a href="{% url 'city' city_name.location_name %}" style="color: white; text-decoration: none;">
+                <img src="{{ city_name.location_image.url }}" alt="{{ city_name.location_name }}" width="80" height="80">
+                {{ city_name.location_name }}
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

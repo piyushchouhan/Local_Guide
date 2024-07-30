@@ -1,0 +1,53 @@
+{% extends "tourist/layout.html" %}
+{% block body %}
+
+<style>
+ ul{
+    color: rgb(255, 255, 255);
+ }
+
+</style>
+
+
+
+<h2><a href="https://www.google.com/search?q={{ city.location_name }}" target="_blank" style="text-decoration: none;">{{ city.location_name }}</a></h2>
+<h3>Available Local Guides at {{ city.location_name }}</h3>
+
+<form method="get">
+    <label for="language">Filter by Language:</label>
+    <select name="language" id="language">
+        <option value="" {% if not selected_language %}selected{% endif %}>All Languages</option>
+        {% for language_choice in language_choices %}
+            <option value="{{ language_choice.language }}" {% if selected_language == language_choice.language %}selected{% endif %}>
+                {{ language_choice.language }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <label for="gender">Filter by Gender:</label>
+    <select name="gender" id="gender">
+        <option value="" {% if not selected_gender %}selected{% endif %}>All Genders</option>
+        {% for gender_choice in gender_choices %}
+            <option value="{{ gender_choice.gender }}" {% if selected_gender == gender_choice.gender %}selected{% endif %}>
+                {{ gender_choice.gender }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <button type="submit">Apply Filters</button>
+</form>
+
+<ul>
+    {% for local_guide in local_guides %}
+    </br>
+    <a href="{% url 'guide_detail' local_guide.id %}" style="color: rgb(249, 249, 249);">{{ local_guide.user.first_name }} {{ local_guide.user.last_name }}</a>
+        <h5>Rate Per Hour : ${{ local_guide.rate_per_hour }}</h5>
+        <h5>Contact : {{ local_guide.contact_info }}</h5>
+        <h5>Language : {{local_guide.language}}</h5>
+        <img src="/media/{{ local_guide.image }}" alt="Local Guide Image" height="200" width="200">
+        </br>
+    {% endfor %}
+ 
+</ul>
+
+{% endblock %}
