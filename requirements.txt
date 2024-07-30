@@ -3,8 +3,7 @@ djangorestframework>=3.12,<4.0
 django-cors-headers>=3.5,<4.0
 paytmchecksum
 python-dotenv==1.0.0
-pscyopg2
+pscyopg2==2.9.7
 whiteNoise==6.7.0
 pytest==8.2.2
 requests==2.31.0
-python == 3.8.10
