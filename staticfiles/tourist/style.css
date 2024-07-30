@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('images/back.jpg') ;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.wrapper {
+    flex: 1; /* Allow content to take up available space */
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1; /* Content takes up available space */
+    /* Your content styles */
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f2edab;
+    color: #fff;
+    padding: 5px;
+}
+
+h2 a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size:xx-large;
+    font-weight: 500;
+    font-family: sans-serif;
+}
+
+.auth-links {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    display: flex;
+    gap: 10px; /* Adds space between buttons */
+}
+
+.btn {
+    text-decoration: none; /* Removes underline from links */
+    color: white; /* Adjust text color as needed */
+    padding: 10px 15px; /* Adjust padding as needed */
+    border-radius: 5px; /* Gives rounded corners to buttons */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Bootstrap primary color */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Bootstrap secondary color */
+}
+.nav-pills {
+    align-items: center; /* Aligns items vertically center */
+}
+
+.search-box .row {
+    width: 100%; /* Ensures the row takes full width of its container */
+}

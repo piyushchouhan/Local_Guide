@@ -11,7 +11,7 @@ __pycache__/
 
 # Django-related
 *.log
-staticfiles/
+!staticfiles/
 media/
 *.pot
 *.pyc
